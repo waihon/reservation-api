@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_24_160357) do
+ActiveRecord::Schema.define(version: 2021_12_25_112652) do
 
   create_table "guests", force: :cascade do |t|
     t.string "email"
     t.string "first_name"
     t.string "last_name"
-    t.string "phone"
+    t.string "phone_1"
     t.string "phone_2"
     t.string "phone_3"
     t.datetime "created_at", precision: 6, null: false
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2021_12_24_160357) do
     t.integer "guest_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "localized_description"
     t.index ["guest_id"], name: "index_reservations_on_guest_id"
   end
 
