@@ -17,10 +17,10 @@ class ReservationsController < ApplicationController
         if @reservation.save
           render status: status
         else
-          render json: { errors: @reservation.errors }, status: :unprocessable_entity
+          render json: { errors: @reservation.errors.full_messages }, status: :unprocessable_entity
         end
       else
-        render json: { errors: @guest.errors }, status: :unprocessable_entity
+        render json: { errors: @guest.errors.full_messages }, status: :unprocessable_entity
       end
     rescue => exception
       render json: { errors: [exception] }, status: :unprocessable_entity
