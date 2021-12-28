@@ -140,6 +140,20 @@ RSpec.describe 'Reservations API', type: :request do
         }
       end
 
+      let(:reservation_without_guest_email) do
+        reservation = valid_reservation[:reservation].except(:guest_email)
+        {
+          reservation: reservation
+        }
+      end
+
+      let(:reservation_without_code) do
+        reservation = valid_reservation[:reservation].except(:code)
+        {
+          reservation: reservation
+        }
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -170,6 +184,34 @@ RSpec.describe 'Reservations API', type: :request do
           expect(response.body).to match(/End date can't be blank/)
           expect(response.body).to match(/Guests can't be blank/)
           expect(response.body).to match(/Payout price can't be blank/)
+        end
+      end
+
+      context "when guest email is not provided" do
+        subject { post "/reservations", params: reservation_without_guest_email }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Invalid payload format/)
+        end
+      end
+
+      context "when reservation code is not provided" do
+        subject { post "/reservations", params: reservation_without_code }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Invalid payload format/)
         end
       end
     end
