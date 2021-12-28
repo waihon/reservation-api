@@ -96,6 +96,13 @@ RSpec.describe 'Reservations API', type: :request do
         }
       end
 
+      let(:reservation_with_missing_params) do
+        reservation = valid_reservation[:reservation].except(:end_date, :number_of_guests, :expected_payout_amount)
+        {
+          reservation: reservation
+        }
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -110,6 +117,22 @@ RSpec.describe 'Reservations API', type: :request do
 
         it "should create the reservation" do
           expect { subject }.to change(Reservation, :count).by(1)
+        end
+      end
+
+      context "when required parameters are not provided" do
+        subject { post "/reservations", params: reservation_with_missing_params }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/End date can't be blank/)
+          expect(response.body).to match(/Guests can't be blank/)
+          expect(response.body).to match(/Payout price can't be blank/)
         end
       end
     end
