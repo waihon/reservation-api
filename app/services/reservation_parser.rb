@@ -93,6 +93,7 @@ class ReservationParser
     # When an email is not found, we create a new guest object, eelse
     # to update an existing one.
     # @email is populated in the map_params_to_variables method.
+    raise "Email cannot be blank" unless @email.present?
     @guest = Guest.find_by(email: @email) || Guest.new
     update_guest
 
@@ -100,6 +101,7 @@ class ReservationParser
     # When a reservation code is not found, we cerate a new reservation
     # object, elease to update an existing one.
     # @reservation_code is populated in the map_params_to_variables method.
+    raise "Reservation code cannot be blank" unless @reservation_code.present?
     @reservation = Reservation.find_by(reservation_code: @reservation_code) || Reservation.new
     update_reservation
 

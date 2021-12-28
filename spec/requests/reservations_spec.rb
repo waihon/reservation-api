@@ -40,6 +40,18 @@ RSpec.describe 'Reservations API', type: :request do
         valid_reservation.except(:reservation_code)
       end
 
+      let(:reservation_with_blank_email) do
+        guest_without_email = valid_reservation[:guest].except(:email)
+        blank_email = { email: "" }
+        updated_guest = { guest: guest_without_email.merge(blank_email) }
+        valid_reservation.except(:guest).merge(updated_guest)
+      end
+
+      let(:reservation_with_blank_code) do
+        blank_reservation_code = { reservation_code: "" }
+        valid_reservation.except(:reservation_code).merge(blank_reservation_code)
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -87,6 +99,20 @@ RSpec.describe 'Reservations API', type: :request do
         end
       end
 
+      context "when guest email is blank" do
+        subject { post "/reservations", params: reservation_with_blank_email }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Email cannot be blank/)
+        end
+      end
+
       context "when reservation code is not provided" do
         subject { post "/reservations", params: reservation_without_code }
 
@@ -98,6 +124,20 @@ RSpec.describe 'Reservations API', type: :request do
         it "should return validation failure messages" do
           subject
           expect(response.body).to match(/Invalid payload format/)
+        end
+      end
+
+      context "when reservation codeis blank" do
+        subject { post "/reservations", params: reservation_with_blank_code }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Reservation code cannot be blank/)
         end
       end
     end
