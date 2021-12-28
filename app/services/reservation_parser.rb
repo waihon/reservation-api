@@ -4,9 +4,12 @@ class ReservationParser
   def self.for(params)
     # A factory method that returns an approprite parser for the
     # payload format.
-    registry.find do |candidate|
-      candidate.handles?(params)
-    end.new(params)
+    parser = registry.find { |candidate| candidate.handles?(params )}
+    if parser
+      return parser.new(params)
+    else
+      raise "Invalid payload format"
+    end
   end
 
   def self.registry
