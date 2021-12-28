@@ -32,7 +32,7 @@ RSpec.describe 'Reservations API', type: :request do
       end
 
       context "when valid parameters are provided" do
-        subject { post "/reservations", params: valid_reservation } 
+        subject { post "/reservations", params: valid_reservation }
 
         it "should have status code 201" do
           subject
@@ -61,6 +61,55 @@ RSpec.describe 'Reservations API', type: :request do
           expect(response.body).to match(/Start date can't be blank/)
           expect(response.body).to match(/Nights can't be blank/)
           expect(response.body).to match(/Status can't be blank/)
+        end
+      end
+    end
+
+    context "using payload #2" do
+      let(:valid_reservation) do
+        {
+          "reservation": {
+            "code": "XXX12345678",
+            "start_date": "2021-03-12",
+            "end_date": "2021-03-16",
+            "expected_payout_amount": "3800.00",
+            "guest_details": {
+              "localized_description": "4 guests",
+              "number_of_adults": 2,
+              "number_of_children": 2,
+              "number_of_infants": 0
+            },
+            "guest_email": "maryjane@example.com",
+            "guest_first_name": "Mary",
+            "guest_last_name": "Jane",
+            "guest_phone_numbers": [
+              "639123456789",
+              "639123456789"
+            ],
+            "listing_security_price_accurate": "500.00",
+            "host_currency": "AUD",
+            "nights": 4,
+            "number_of_guests": 4,
+            "status_type": "accepted",
+            "total_paid_amount_accurate": "4300.00"
+          }
+        }
+      end
+
+      context "when valid parameters are provided" do
+        subject { post "/reservations", params: valid_reservation }
+
+        it "should have status code 201" do
+          subject
+          expect(response).to have_http_status(:created)
+        end
+
+        it "should create the guest" do
+          expect { subject }.to change(Guest, :count).by(1)
+        end
+
+        it "should create the reservation" do
+          expect { subject }.to change(Reservation, :count).by(1)
         end
       end
     end
