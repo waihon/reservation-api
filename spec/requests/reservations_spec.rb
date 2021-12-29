@@ -52,6 +52,11 @@ RSpec.describe 'Reservations API', type: :request do
         valid_reservation.except(:reservation_code).merge(blank_reservation_code)
       end
 
+      let(:reservation_with_invalid_date) do
+        invalid_date = { start_date: "Twenty Fifth"}
+        valid_reservation.except(:start_date).merge(invalid_date)
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -140,6 +145,20 @@ RSpec.describe 'Reservations API', type: :request do
           expect(response.body).to match(/Reservation code cannot be blank/)
         end
       end
+
+      context "when start date is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_date }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Start date must be a valid date/)
+        end
+      end
     end
 
     context "using payload #2" do
@@ -205,6 +224,14 @@ RSpec.describe 'Reservations API', type: :request do
       let(:reservation_with_blank_code) do
         blank_code = { code: "" }
         reservation = valid_reservation[:reservation].except(:code).merge(blank_code)
+        {
+          reservation: reservation
+        }
+      end
+
+      let(:reservation_with_invalid_date) do
+        invalid_date = { end_date: "Twenty Fifth"}
+        reservation = valid_reservation[:reservation].except(:end_date).merge(invalid_date)
         {
           reservation: reservation
         }
@@ -296,6 +323,20 @@ RSpec.describe 'Reservations API', type: :request do
         it "should return validation failure messages" do
           subject
           expect(response.body).to match(/Reservation code cannot be blank/)
+        end
+      end
+
+      context "when end date is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_date }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/End date must be a valid date/)
         end
       end
     end
