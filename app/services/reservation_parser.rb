@@ -135,10 +135,17 @@ class ReservationParser
   def update_reservation
     # This method contains the parsing logic for the common fields of a
     # reservation and may not need to be overriden by a child parser.
+    field = ""
     begin
       reservation.reservation_code = @reservation_code if @reservation_code.present?
-      reservation.start_date = Date.parse(@start_date) if @start_date.present?
-      reservation.end_date = Date.parse(@end_date) if @end_date.present?
+      dates = ["start_date", "end_date"]
+      dates.each do |date|
+        field = date
+        if self.instance_variable_get("@" + field).present?
+          # E.g. reservation.start_date = Date.parse(@start_date)
+          reservation.send(field + "=", Date.parse(self.instance_variable_get("@" + field)))
+        end
+      end
       reservation.nights = Integer(@nights) if @nights.present?
       reservation.guests = Integer(@guests) if @guests.present?
       reservation.adults = Integer(@adults) if @adults.present?
@@ -155,7 +162,12 @@ class ReservationParser
       # include them in below hook.
       update_additional_reservation_fields
     rescue => exception
-      raise exception
+      case exception.to_s
+      when /invalid date/
+        raise "#{field.humanize} must be a valid date in YYYY-MM-DD format"
+      else
+        raise exception
+      end
     end
   end
 
