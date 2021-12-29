@@ -57,6 +57,11 @@ RSpec.describe 'Reservations API', type: :request do
         valid_reservation.except(:start_date).merge(invalid_date)
       end
 
+      let(:reservation_with_invalid_integer) do
+        invalid_integer = { nights: "Five"}
+        valid_reservation.except(:nights).merge(invalid_integer)
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -132,7 +137,7 @@ RSpec.describe 'Reservations API', type: :request do
         end
       end
 
-      context "when reservation codeis blank" do
+      context "when reservation code is blank" do
         subject { post "/reservations", params: reservation_with_blank_code }
 
         it "should return status code 422" do
@@ -157,6 +162,20 @@ RSpec.describe 'Reservations API', type: :request do
         it "should return validation failure messages" do
           subject
           expect(response.body).to match(/Start date must be a valid date/)
+        end
+      end
+
+      context "when nights is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_integer }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Nights must be a valid number/)
         end
       end
     end
@@ -232,6 +251,14 @@ RSpec.describe 'Reservations API', type: :request do
       let(:reservation_with_invalid_date) do
         invalid_date = { end_date: "Twenty Fifth"}
         reservation = valid_reservation[:reservation].except(:end_date).merge(invalid_date)
+        {
+          reservation: reservation
+        }
+      end
+
+      let(:reservation_with_invalid_integer) do
+        invalid_integer = { number_of_guests: "Four"}
+        reservation = valid_reservation[:reservation].except(:number_of_guests).merge(invalid_integer)
         {
           reservation: reservation
         }
@@ -337,6 +364,20 @@ RSpec.describe 'Reservations API', type: :request do
         it "should return validation failure messages" do
           subject
           expect(response.body).to match(/End date must be a valid date/)
+        end
+      end
+
+      context "when guests is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_integer }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Guests must be a valid number/)
         end
       end
     end
