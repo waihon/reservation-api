@@ -62,6 +62,11 @@ RSpec.describe 'Reservations API', type: :request do
         valid_reservation.except(:nights).merge(invalid_integer)
       end
 
+      let(:reservation_with_invalid_float) do
+        invalid_float = { payout_price: "Two thousand five hundred"}
+        valid_reservation.except(:payout_price).merge(invalid_float)
+      end
+
       context "when valid parameters are provided" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -178,6 +183,20 @@ RSpec.describe 'Reservations API', type: :request do
           expect(response.body).to match(/Nights must be a valid number/)
         end
       end
+
+      context "when payout price is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_float }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Payout price must be a valid monetary value/)
+        end
+      end
     end
 
     context "using payload #2" do
@@ -259,6 +278,14 @@ RSpec.describe 'Reservations API', type: :request do
       let(:reservation_with_invalid_integer) do
         invalid_integer = { number_of_guests: "Four"}
         reservation = valid_reservation[:reservation].except(:number_of_guests).merge(invalid_integer)
+        {
+          reservation: reservation
+        }
+      end
+
+      let(:reservation_with_invalid_float) do
+        invalid_float = { listing_security_price_accurate: "Five Hundred"}
+        reservation = valid_reservation[:reservation].except(:listing_security_price_accurate).merge(invalid_float)
         {
           reservation: reservation
         }
@@ -378,6 +405,20 @@ RSpec.describe 'Reservations API', type: :request do
         it "should return validation failure messages" do
           subject
           expect(response.body).to match(/Guests must be a valid number/)
+        end
+      end
+
+      context "when security price is invalid" do
+        subject { post "/reservations", params: reservation_with_invalid_float }
+
+        it "should return status code 422" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return validation failure messages" do
+          subject
+          expect(response.body).to match(/Security price must be a valid monetary value/)
         end
       end
     end
