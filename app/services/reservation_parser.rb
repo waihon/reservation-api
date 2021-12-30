@@ -1,4 +1,18 @@
 class ReservationParser
+  # To introduce a new payload format, we'll need to do the following in
+  # this source file:
+  # 1. Create a new parser class inheriting from ReservationParser.
+  # 2. Override self.handles? with parameters unique to the payload.
+  # 3. Override reservation_variables by removing inapplicable fields and
+  #    adding fields unique to the payload.
+  # 4. Override reservation_params with a list of parameters corresponding
+  #    to reservation_variables.
+  # 5. Override update_additional_guest_fields with additional guest fields
+  #    specific to the payload.
+  # 6. Override update_additional_reservation_fields with additional
+  #    reservation fields specific to the payload.
+  # Besides, we'll have to add the parameters of the new payload format to
+  # reservation_params of ReservationsController.
   attr_reader :params, :guest, :reservation
 
   def self.for(params)
