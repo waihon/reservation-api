@@ -40,3 +40,8 @@ Things you may want to cover:
 * `bin/rails g migration rename_phone_of_guests`
 * `bin/rails g migration add_localized_description_to_reservations`
 * `bin/rails db:migrate`
+
+### Testing
+
+* `bin/rails g rspec:install`
+* `mkdir spec/factories`
