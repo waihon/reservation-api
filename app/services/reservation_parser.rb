@@ -138,6 +138,8 @@ class ReservationParser
     field = ""
     begin
       reservation.reservation_code = @reservation_code if @reservation_code.present?
+      reservation.status = @status if @status.present?
+      reservation.currency = @currency if @currency.present?
 
       dates = ["start_date", "end_date"]
       dates.each do |date|
@@ -149,11 +151,6 @@ class ReservationParser
       end
 
       integers = ["nights", "guests", "adults", "children", "infants"]
-      # reservation.nights = Integer(@nights) if @nights.present?
-      # reservation.guests = Integer(@guests) if @guests.present?
-      # reservation.adults = Integer(@adults) if @adults.present?
-      # reservation.children = Integer(@children) if @children.present?
-      # reservation.infants = Integer(@infants) if @infants.present?
       integers.each do |integer|
         field = integer
         if self.instance_variable_get("@" + field).present?
@@ -162,11 +159,16 @@ class ReservationParser
         end
       end
 
-      reservation.status = @status if @status.present?
-      reservation.currency = @currency if @currency.present?
-      reservation.payout_price = @payout_price.to_f if @payout_price.present?
-      reservation.security_price = @security_price.to_f if @security_price.present?
-      reservation.total_price = @total_price.to_f if @total_price.present?
+      floats = ["payout_price", "security_price", "total_price"]
+      floats.each do |float|
+        field = float
+        if self.instance_variable_get("@" + field).present?
+          # E.g. reservation.payout_price = Integer(@payout_price)
+          reservation.send(field + "=", Float(self.instance_variable_get("@" + field)))
+        end
+      end
+
+      # A reservation belongs to a guest
       reservation.guest = guest
 
       # If there's any reservation fields specific to a payload, we should
@@ -178,6 +180,8 @@ class ReservationParser
         raise "#{field.humanize} must be a valid date in YYYY-MM-DD format"
       when /invalid value for Integer/
         raise "#{field.humanize} must be a valid number"
+      when /invalid value for Float/
+        raise "#{field.humanize} must be a valid monetary value"
       else
         raise exception
       end
