@@ -15,7 +15,7 @@ class ReservationsController < ApplicationController
       # update in the case of an existing record.
       if @guest.save
         if @reservation.save
-          render status: status
+          head status
         else
           render json: { errors: @reservation.errors.full_messages }, status: :unprocessable_entity
         end
