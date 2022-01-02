@@ -82,6 +82,16 @@ RSpec.describe 'Reservations API', type: :request do
         it "should create a new reservation" do
           expect { subject }.to change(Reservation, :count).by(1)
         end
+
+        it "should associate the new guest with the new reservation" do
+          subject
+
+          guest = Guest.find_by(email: "joedoe@example.com")
+          reservation = Reservation.find_by(reservation_code: "YYY12345679")
+
+          expect(reservation.guest).to eq(guest)
+        end
+      end
           expect { subject }.to change(Reservation, :count).by(1)
         end
       end
