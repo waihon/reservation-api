@@ -444,6 +444,13 @@ RSpec.describe 'Reservations API', type: :request do
         { reservation: reservation }
       end
 
+      let(:reservation_with_new_email) do
+        reservation = valid_reservation.dig(:reservation) || {}
+        new_email = { guest_email: "newemail@example.com" }
+        reservation.merge!(new_email)
+        { reservation: reservation }
+      end
+
       context "when valid parameters are provided for a new guest and a new reservation" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -535,6 +542,35 @@ RSpec.describe 'Reservations API', type: :request do
         it "should associate the existing guest with the nerw reservation" do
           subject
           guest = Guest.find_by(email: "maryjane@example.com")
+          reservation = Reservation.find_by(reservation_code: "XXX12345678")
+
+          expect(reservation.guest).to eq(guest)
+        end
+      end
+
+      context "when valid parameters are provided for a new guest but an existing reservation" do
+        before do
+          post "/reservations", params: valid_reservation
+        end
+
+        subject { post "/reservations", params: reservation_with_new_email }
+
+        it "should return status code 200" do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "should create a new guest" do
+          expect { subject }.to change(Guest, :count).by(1)
+        end
+
+        it "should not create any reservation" do
+          expect { subject }.not_to change(Reservation, :count)
+        end
+
+        it "should associate the new guest with the existing reservation" do
+          subject
+          guest = Guest.find_by(email: "newemail@example.com")
           reservation = Reservation.find_by(reservation_code: "XXX12345678")
 
           expect(reservation.guest).to eq(guest)
