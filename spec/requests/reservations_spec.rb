@@ -67,6 +67,17 @@ RSpec.describe 'Reservations API', type: :request do
         valid_reservation.except(:payout_price).merge(invalid_float)
       end
 
+      let(:changed_reservation) do
+        valid_reservation.merge(
+          {
+            "start_date": "2021-04-22",
+            "end_date": "2021-04-25",
+            "guests": 6,
+            "children": 2
+          }
+        )
+      end
+
       context "when valid parameters are provided for a new guest and a new reservation" do
         subject { post "/reservations", params: valid_reservation }
 
@@ -86,6 +97,54 @@ RSpec.describe 'Reservations API', type: :request do
         it "should associate the new guest with the new reservation" do
           subject
 
+          guest = Guest.find_by(email: "joedoe@example.com")
+          reservation = Reservation.find_by(reservation_code: "YYY12345679")
+
+          expect(reservation.guest).to eq(guest)
+        end
+      end
+
+      context "when valid parameters are provided for an existing guest and an existing reservation" do
+        before do
+          post "/reservations", params: valid_reservation
+        end
+
+        subject { post "/reservations", params: changed_reservation }
+
+        it "should return status code 200" do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "should not create any new guest" do
+          expect { subject }.not_to change(Guest, :count)
+        end
+
+        it "should not create any new reservation" do
+          expect { subject }.not_to change(Reservation, :count)
+        end
+
+        it "should accept changes to reservation" do
+          # Before the changes
+          reservation = Reservation.last
+          expect(reservation.reservation_code).to eq("YYY12345679")
+          expect(reservation.start_date).to eq(Date.parse("2021-04-20"))
+          expect(reservation.end_date).to eq(Date.parse("2021-04-23"))
+          expect(reservation.guests).to eq(5)
+          expect(reservation.children).to eq(1)
+
+          subject
+
+          # After the changes
+          reservation = Reservation.last
+          expect(reservation.reservation_code).to eq("YYY12345679")
+          expect(reservation.start_date).to eq(Date.parse("2021-04-22"))
+          expect(reservation.end_date).to eq(Date.parse("2021-04-25"))
+          expect(reservation.guests).to eq(6)
+          expect(reservation.children).to eq(2)
+        end
+
+        it "should maintain the association between the existing guest and reservation" do
           guest = Guest.find_by(email: "joedoe@example.com")
           reservation = Reservation.find_by(reservation_code: "YYY12345679")
 
