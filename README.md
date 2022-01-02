@@ -72,17 +72,9 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
     ```
     rbenv rehash
     ```
-14. Verify that Rails 6.1.4 was successfully installed by typing:
-    ```
-    rails -v
-    ```
-    You should see something like the following, though your exact path number may be slightly different:
-    ```
-    Rails 6.1.4.4
-    ```
 #### SQLite
-15. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the installer below "Precompiled Binaries for Mac OS X".
-16. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
+14. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the installer below "Precompiled Binaries for Mac OS X".
+15. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
 16. Proceed to the [next section](#remaining-sections).
 
 ### <a name="windows-10">*Windows 10*</a>
@@ -171,14 +163,6 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
    ```
    rbenv rehash
    ```
-10. Verify that Rails 6.1.4 was successfully installed by typing:
-    ```
-    rails -v
-    ```
-    You` should see something like the following, though your exact path number may be slightly different:
-    ```
-    Rails 6.1.4.4
-    ```
 #### SQLite
 11. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the installer below "Precompiled Binaries for Linux".
 12. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
@@ -187,7 +171,7 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
 
 ## <a name="application-setup">Application Setup</a>
 1. Get the application source code using one of the following options:
-   * Download a [ZIP file](https://github.com/waihon/reservation-api/archive/refs/heads/main.zip) from GitHub
+   * Download a [ZIP file](https://github.com/waihon/reservation-api/archive/refs/heads/main.zip) from GitHub, and rename the extracted folder from `reservation-api-main`, for example, to `reservation-api`.
    * Clone the source code repository via SSH:
      ```
      git clone git@github.com:waihon/reservation-api.git
@@ -204,18 +188,14 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
    ```
    bundle install
    ```
-4. Verify that the application is set up correctly:
-   ```
-   bin/rails s
-   ```
-5. Open a web browser and enter the following URL:
-   ```
-   http://localhost:3000/
-   ```
-   You should see something like the following:
-   ```
-   {"status":"ok"}
-   ```
+4. Verify that Rails 6.1.4 was successfully installed by typing:
+    ```
+    bin/rails -v
+    ```
+    You` should see something like the following, though your exact path number may be slightly different:
+    ```
+    Rails 6.1.4.4
+    ```
 
 ## Database creation
 1. Enter the following command to create development and test databases with database migration automatically ran:
@@ -240,6 +220,14 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
 2. Bring up the application server:
    ```
    bin/rails s
+   ```
+3. Open a web browser and enter the following URL:
+   ```
+   http://localhost:3000/
+   ```
+   You should see something like the following:
+   ```
+   {"status":"ok"}
    ```
 
 ## Making API requests
