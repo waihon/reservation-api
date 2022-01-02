@@ -424,7 +424,7 @@ RSpec.describe 'Reservations API', type: :request do
         }
       end
 
-      context "when valid parameters are provided" do
+      context "when valid parameters are provided for a new guest and a new reservation" do
         subject { post "/reservations", params: valid_reservation }
 
         it "should have status code 201" do
@@ -432,11 +432,11 @@ RSpec.describe 'Reservations API', type: :request do
           expect(response).to have_http_status(:created)
         end
 
-        it "should create the guest" do
+        it "should create a new guest" do
           expect { subject }.to change(Guest, :count).by(1)
         end
 
-        it "should create the reservation" do
+        it "should create a new reservation" do
           expect { subject }.to change(Reservation, :count).by(1)
         end
       end
