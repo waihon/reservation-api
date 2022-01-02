@@ -511,6 +511,36 @@ RSpec.describe 'Reservations API', type: :request do
         end
       end
 
+      context "when valid parameters are provided for an existing guest but a new reservation" do
+        before do
+          guest = build(:guest, email: "maryjane@example.com")
+          guest.save
+        end
+
+        subject { post "/reservations", params: valid_reservation }
+
+        it "should return status code 201" do
+          subject
+          expect(response).to have_http_status(:created)
+        end
+
+        it "should not create any guest" do
+          expect { subject }.not_to change(Guest, :count)
+        end
+
+        it "should create a new reservation" do
+          expect { subject }.to change(Reservation, :count).by(1)
+        end
+
+        it "should associate the existing guest with the nerw reservation" do
+          subject
+          guest = Guest.find_by(email: "maryjane@example.com")
+          reservation = Reservation.find_by(reservation_code: "XXX12345678")
+
+          expect(reservation.guest).to eq(guest)
+        end
+      end
+
       context "when required parameters are not provided" do
         subject { post "/reservations", params: reservation_with_missing_params }
 
