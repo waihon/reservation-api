@@ -385,7 +385,7 @@ RSpec.describe 'Reservations API', type: :request do
 
       let(:reservation_with_blank_email) do
         blank_email = { guest_email: "" }
-        reservation = valid_reservation[:reservation].except(:guest_email).merge(blank_email)
+        reservation = valid_reservation[:reservation].merge(blank_email)
         {
           reservation: reservation
         }
@@ -393,15 +393,15 @@ RSpec.describe 'Reservations API', type: :request do
 
       let(:reservation_with_blank_code) do
         blank_code = { code: "" }
-        reservation = valid_reservation[:reservation].except(:code).merge(blank_code)
+        reservation = valid_reservation[:reservation].merge(blank_code)
         {
           reservation: reservation
         }
       end
 
       let(:reservation_with_invalid_date) do
-        invalid_date = { end_date: "Twenty Fifth"}
-        reservation = valid_reservation[:reservation].except(:end_date).merge(invalid_date)
+        invalid_date = { end_date: "Twenty Fifth" }
+        reservation = valid_reservation[:reservation].merge(invalid_date)
         {
           reservation: reservation
         }
@@ -409,7 +409,7 @@ RSpec.describe 'Reservations API', type: :request do
 
       let(:reservation_with_invalid_integer) do
         invalid_integer = { number_of_guests: "Four"}
-        reservation = valid_reservation[:reservation].except(:number_of_guests).merge(invalid_integer)
+        reservation = valid_reservation[:reservation].merge(invalid_integer)
         {
           reservation: reservation
         }
@@ -417,7 +417,7 @@ RSpec.describe 'Reservations API', type: :request do
 
       let(:reservation_with_invalid_float) do
         invalid_float = { listing_security_price_accurate: "Five Hundred"}
-        reservation = valid_reservation[:reservation].except(:listing_security_price_accurate).merge(invalid_float)
+        reservation = valid_reservation[:reservation].merge(invalid_float)
         {
           reservation: reservation
         }
