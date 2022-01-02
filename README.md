@@ -23,7 +23,7 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
 #### Homebrew
 2. Install [Homebrew](https://brew.sh/), a package manager for macOS:
    ```
-   /$usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
    If you're asked about installing Apple's Command Line Tools for Xcode, go ahead and answer "yes".
 #### rbenv
