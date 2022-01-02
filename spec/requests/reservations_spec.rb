@@ -33,7 +33,7 @@ RSpec.describe 'Reservations API', type: :request do
 
       let(:reservation_without_guest_email) do
         guest_without_email = valid_reservation[:guest].except(:email)
-        valid_reservation.except(:guest).merge(guest_without_email)
+        valid_reservation.merge({ guest: guest_without_email })
       end
 
       let(:reservation_without_code) do
@@ -41,30 +41,29 @@ RSpec.describe 'Reservations API', type: :request do
       end
 
       let(:reservation_with_blank_email) do
-        guest_without_email = valid_reservation[:guest].except(:email)
         blank_email = { email: "" }
-        updated_guest = { guest: guest_without_email.merge(blank_email) }
-        valid_reservation.except(:guest).merge(updated_guest)
+        guest_with_blank_email = valid_reservation[:guest].merge(blank_email)
+        valid_reservation.merge({ guest: guest_with_blank_email })
       end
 
       let(:reservation_with_blank_code) do
         blank_reservation_code = { reservation_code: "" }
-        valid_reservation.except(:reservation_code).merge(blank_reservation_code)
+        valid_reservation.merge(blank_reservation_code)
       end
 
       let(:reservation_with_invalid_date) do
-        invalid_date = { start_date: "Twenty Fifth"}
-        valid_reservation.except(:start_date).merge(invalid_date)
+        invalid_date = { start_date: "Twenty Fifth" }
+        valid_reservation.merge(invalid_date)
       end
 
       let(:reservation_with_invalid_integer) do
-        invalid_integer = { nights: "Five"}
-        valid_reservation.except(:nights).merge(invalid_integer)
+        invalid_integer = { nights: "Five" }
+        valid_reservation.merge(invalid_integer)
       end
 
       let(:reservation_with_invalid_float) do
-        invalid_float = { payout_price: "Two thousand five hundred"}
-        valid_reservation.except(:payout_price).merge(invalid_float)
+        invalid_float = { payout_price: "Two thousand five hundred" }
+        valid_reservation.merge(invalid_float)
       end
 
       let(:changed_reservation) do
