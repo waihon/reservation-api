@@ -73,8 +73,15 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
     rbenv rehash
     ```
 #### SQLite
-14. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the installer below "Precompiled Binaries for Mac OS X".
-15. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
+14. SQLite is included in macOS by default. It is located in the `/usr/bin` directory and called `sqlite3`. To access a command line interface for SQLite:
+    ```
+    sqlite3
+    ```
+15. If you need a more recent version of SQLite than that provided by macOS:
+    ```
+    brew install sqlite
+    ```
+
 16. Proceed to the [next section](#remaining-sections).
 
 ### <a name="windows-10">*Windows 10*</a>
@@ -115,9 +122,16 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
     Rails 6.1.4.4
     ```
 #### SQLite
-1.  Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the link next to "64-bit DLL (x64) for SQLite version 3.37.1", for example, under "Precompiled Binaries for Windows" section.
-2. Save the installer to the Downloads foler, for example, and then run the installer once it has finished downloading.
-3.  Proceed to the [next section](#remaining-sections).
+14. SQLite is not included in Windows 10 by default. To install, navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click "sqlite-tools-win32-x86-3370100.zip" under "Precompiled Binaries for Windows" section.
+15. Create a folder called `C:\sqlite`.
+17. Copy the files from the downloaded zip into `C:\sqlite`.
+18. Add `C:\sqlite` to the PATH on Windows 10.
+19. To access a command line interface for SQLite, enter the following in a Command Prompt window:
+    ```
+    sqlite3
+    ```
+
+20.  Proceed to the [next section](#remaining-sections).
 
 ### <a name="linux">*Linux*</a>
 1. Start by updating `apt-get` and installing the dependencies required for rbenv and Ruby:
@@ -168,8 +182,7 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
    rbenv rehash
    ```
 #### SQLite
-11. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the installer below "Precompiled Binaries for Linux".
-12. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
+11. SQLite command line interface has been installed as part of step 1.
 
 <a name="remaining-sections">After</a> installing the necessary software and tools for your operationg system, you may proceed to the remaining sections of the document.
 
