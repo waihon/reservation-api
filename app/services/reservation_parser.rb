@@ -177,7 +177,7 @@ class ReservationParser
       floats.each do |float|
         field = float
         if self.instance_variable_get("@" + field).present?
-          # E.g. reservation.payout_price = Integer(@payout_price)
+          # E.g. reservation.payout_price = Float(@payout_price)
           reservation.send(field + "=", Float(self.instance_variable_get("@" + field)))
         end
       end
