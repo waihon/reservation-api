@@ -80,15 +80,19 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
 ### <a name="windows-10">*Windows 10*</a>
 #### Ruby
 1. Navigate to Ruby installer [downloads page](https://rubyinstaller.org/downloads/) and click the "Ruby+Devkit 2.7.5-1 (x64)" executable installer.
-2. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
+2. Save the installer to the Downloads folder, for example, and then run the installer once it has finished downloading.
 3. Read the License Agreement, make sure "I accept the License" is selected, and click "Next".
 4. Accept the default installation folder and make sure all optional tasks are checked, and then click "Install".
-5. On the "Select Components" screen, make sure "Ruby-2.7.5 base files" and "MSYS2 development toollchain" are checked, click "Next" and Ruby will be installed in the `C:\Ruby27-x64` directory.
-6. On the "Completing the Ruby 2.7.5-1-x64 with MSYS2 Setup Wizard" screen, make sure "Run 'ridk install' to setup MSYS2" is checked.
-7. When you click "Finish", a new command window will open asking you which components of MSYS2 you want to install. Choose "1" which is the base MSYS2 installation.
-8. It will proceed to install a bunch of stuff, and then return back to the prompt asking which components you want to install. You should see the message "MSYS2 seems to be properly installed. Go ahead and close that command window.
-9. Open a new command prompt by selecting the Start menu, type `cmd` into the search box, and press Enter.
-10. Verify that Ruby 2.7.5 was successfully installed by typing:
+5. On the "Select Components" screen, make sure the following are checked:
+   * Ruby-2.7.5 base files
+   * Ruby RI and HTML documentation
+   * MSYS2 development toollchain 2021-11-27
+6. Click "Next" and Ruby will be installed into `C:\Ruby27-x64` directory and MSYS2 will be installed into `C:\Ruby27-x64\msys64` directory.
+7. On the "Completing the Ruby 2.7.5-1-x64 with MSYS2 Setup Wizard" screen, make sure "Run 'ridk install' to setup MSYS2 and development toolchain" is checked.
+8. When you click "Finish", a new Command Prompt window will open asking you which components of MSYS2 you want to install. Choose "1" which is the base MSYS2 installation.
+9. It will proceed to install a bunch of stuff, and then return back to the prompt asking which components you want to install. You should see the message "MSYS2 seems to be properly installed. Go ahead and close that command window.
+10.  Open a new Command Prompt window by selecting the Start menu, type `cmd` into the search box, and press Enter.
+11. Verify that Ruby 2.7.5 was successfully installed by typing:
     ```
     ruby -v
     ```
@@ -98,11 +102,11 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
     ```
     If instead you see "Command not found", then you either need to open a _new_ command prompt and try again, or check that your `PATH` environmenti variable includes the `C:\Ruby27-x64\bin` directory.
 #### Rails
-13. Install Rails 6.1.4 by typing:
+12. Install Rails 6.1.4 by typing:
     ```
     gem install rails -v 6.1.4 --no-document
     ```
-14. Verity that Rails 6.1.4 was successfully installed by typing:
+13. Verity that Rails 6.1.4 was successfully installed by typing:
     ```
     rails -v
     ```
@@ -111,9 +115,9 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
     Rails 6.1.4.4
     ```
 #### SQLite
-15. Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click an appropriate installer below "Precompiled Binaries for Windows".
-16. Save the installer to your Desktop, for example, and then run the installer once it has finished downloading.
-16. Proceed to the [next section](#remaining-sections).
+1.  Navigate to SQLite installer [downloads page](https://sqlite.org/download.html) and click the link next to "64-bit DLL (x64) for SQLite version 3.37.1", for example, under "Precompiled Binaries for Windows" section.
+2. Save the installer to the Downloads foler, for example, and then run the installer once it has finished downloading.
+3.  Proceed to the [next section](#remaining-sections).
 
 ### <a name="linux">*Linux*</a>
 1. Start by updating `apt-get` and installing the dependencies required for rbenv and Ruby:
@@ -190,7 +194,7 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
    ```
 4. Verify that Rails 6.1.4 was successfully installed by typing:
     ```
-    bin/rails -v
+    rails -v
     ```
     You` should see something like the following, though your exact path number may be slightly different:
     ```
@@ -200,7 +204,7 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
 ## Database creation
 1. Enter the following command to create development and test databases with database migration automatically ran:
    ```
-   bin/rails db:setup
+   rails db:setup
    ```
 
 ## Running test suite
@@ -216,10 +220,10 @@ Since GitHub doesn't support opening a link in a new tab, you may command+click 
    ```
 
 ## Running the application
-1. Open a Terminal/command promot/shell session.
+1. Open a Terminal/Command Prompt/shell session.
 2. Bring up the application server:
    ```
-   bin/rails s
+   rails s
    ```
 3. Open a web browser and enter the following URL:
    ```
